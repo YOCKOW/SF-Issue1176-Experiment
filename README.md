@@ -1,0 +1,1 @@
+This repository contains a Swift file to make an experiment for [swiftlang/swift-foundation/issues#1176](https://github.com/swiftlang/swift-foundation/issues/1176).
