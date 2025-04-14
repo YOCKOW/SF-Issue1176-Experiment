@@ -15,12 +15,17 @@ jobs:
           - ubuntu-latest
           - macos-latest
           - windows-latest
+        swift-version:
+          - "6.1"
+          - latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: SwiftyLab/setup-swift@latest
         with:
-          swift-version: '6.1.0'
+          swift-version: ${{ matrix.swift-version }}
+          development: true
+          check-latest: true
       - name: Execute Experiment (macOS)
         if: runner.os == 'macOS'
         run: xcrun --sdk macosx swift ./experiment.swift
