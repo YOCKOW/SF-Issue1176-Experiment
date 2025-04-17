@@ -14,15 +14,11 @@ print("~~~~~~~~~~ INFO ~~~~~~~~~~")
 let execName = CommandLine.arguments[0]
 print("Executable Name: \(execName)")
 
-let curDir = URL.currentDirectory()
-print("Current Directory: \(curDir)")
+let curDirURL = URL.currentDirectory()
+print("Current Directory: \(curDirURL)")
 
-let execPath =  if execName.hasPrefix("/") {
-  URL(fileURLWithPath: execName, isDirectory: false).resolvingSymlinksInPath()
-} else {
-  curDir.appending(component: execName).resolvingSymlinksInPath()
-}
-print("Executable Path: \(execPath.path)")
+let execURL = URL(fileURLWithFileSystemRepresentation: execName, isDirectory: false, relativeTo: curDirURL)
+print("Executable Path: \(execURL.path)")
 
 let mode = ({ () -> _ExecMode in
   if CommandLine.arguments.count > 1 {
@@ -129,7 +125,7 @@ func run() async throws {
         let process = Process()
         let stdout = Pipe()
         let stderr = Pipe()
-        process.executableURL = execPath
+        process.executableURL = execURL
         process.arguments = [mode.rawValue]
         process.standardOutput = stdout
         process.standardError = stderr
