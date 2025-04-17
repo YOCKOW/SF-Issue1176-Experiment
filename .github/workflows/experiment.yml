@@ -35,4 +35,8 @@ jobs:
         run: swiftc ./experiment.swift && ./experiment
       - name: Execute Experiment (Windows)
         if: runner.os == 'Windows'
-        run: swiftc .\experiment.swift && .\experiment.exe
+        run: |
+          swiftc .\experiment.swift
+          .\experiment.exe --test-deep-type
+          .\experiment.exe --test-decoding
+          .\experiment.exe --test-encoding
