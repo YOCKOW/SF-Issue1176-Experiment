@@ -26,12 +26,13 @@ jobs:
           swift-version: ${{ matrix.swift-version }}
           development: true
           check-latest: true
+          cache-snapshot: false
       - name: Execute Experiment (macOS)
         if: runner.os == 'macOS'
-        run: xcrun --sdk macosx swift ./experiment.swift
+        run: xcrun --sdk macosx swiftc ./experiment.swift && ./experiment
       - name: Execute Experiment (Linux)
         if: runner.os == 'Linux'
         run: swiftc ./experiment.swift && ./experiment
       - name: Execute Experiment (Windows)
         if: runner.os == 'Windows'
-        run: swiftc ./experiment.swift && .\experiment.exe
+        run: swiftc .\experiment.swift && .\experiment.exe
