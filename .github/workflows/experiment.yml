@@ -15,18 +15,31 @@ jobs:
           - ubuntu-latest
           - macos-latest
           - windows-latest
+        swift-version:
+          - "6.1"
+          - latest
+        exclude:
+          - os: windows-latest
+            swift-version: latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: SwiftyLab/setup-swift@latest
         with:
-          swift-version: '6.1.0'
+          swift-version: ${{ matrix.swift-version }}
+          development: true
+          check-latest: true
+          cache-snapshot: false
       - name: Execute Experiment (macOS)
         if: runner.os == 'macOS'
-        run: xcrun --sdk macosx swift ./experiment.swift
+        run: xcrun --sdk macosx swiftc ./experiment.swift && ./experiment
       - name: Execute Experiment (Linux)
         if: runner.os == 'Linux'
         run: swiftc ./experiment.swift && ./experiment
       - name: Execute Experiment (Windows)
         if: runner.os == 'Windows'
-        run: swiftc ./experiment.swift && .\experiment.exe
+        run: |
+          swiftc .\experiment.swift
+          .\experiment.exe --test-deep-type
+          .\experiment.exe --test-decoding
+          .\experiment.exe --test-encoding
